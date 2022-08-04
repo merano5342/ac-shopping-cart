@@ -12,17 +12,14 @@ type BuildItemProps = {
 
 const BuildItem: React.FC<BuildItemProps> = (props) => {
   // prettier-ignore
-  const {
-    title,
-    quantity,
-    price,
-    id,
-    onRemoveItem,
-    onUpdateQuantity,
-  } = props;
+  // const { productItems } = useCartContext();
+
+  const { title, quantity, price, id, inventory, onRemoveItem, onUpdateQuantity } = props;
 
   // 小計
   const lineItemPrice = price * quantity;
+  // console.log('available', typeof available, available);
+
   return (
     <section className="row" data-name="CartLineItem" data-gradient>
       <div className="col-2">{title}</div>
@@ -30,9 +27,16 @@ const BuildItem: React.FC<BuildItemProps> = (props) => {
         {/* FIXME：這裡有 bug，怎麼修好他呢？
         onUpdateQuantity(id, changeQuantity)
         */}
-        <button onClick={() => onUpdateQuantity(id, -1)}>-</button>
+        <button disabled={quantity < 2} onClick={() => onUpdateQuantity(id, -1)}>
+          -
+        </button>
         <span className="px-1">{quantity}</span>
-        <button onClick={() => onUpdateQuantity(id, +1)}>+</button>
+        <button
+          disabled={inventory - quantity <= 0}
+          onClick={() => onUpdateQuantity(id, +1)}
+        >
+          +
+        </button>
       </div>
 
       <div className="col-2">{price}</div>

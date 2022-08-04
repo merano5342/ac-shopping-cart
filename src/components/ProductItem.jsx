@@ -18,6 +18,7 @@ const ProductItem: React.FC<ProductItemProps> = (props) => {
     onAddToCart,
   } = props;
 
+  // const currentInventory =
   return (
     <section className="card px-0" data-name="ProductItem">
       <img src={img} alt={title} />
@@ -26,10 +27,10 @@ const ProductItem: React.FC<ProductItemProps> = (props) => {
           <div>{title}</div>
           <div>${price}</div>
         </div>
-        <small>Available quantity:{inventory}</small>
-        {/* FIXME: 如果賣完，文字換成 Sold out，同時不能點擊 */}
+        <small>{inventory > 0 ? `Available quantity:${inventory}` : 'Sold out'}</small>
         <button
           className="btn btn-sm btn-warning fw-light"
+          disabled={inventory <= 0}
           onClick={() => {
             onAddToCart(id);
           }}

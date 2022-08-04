@@ -24,37 +24,47 @@ const ShoppingCart = () => {
   }, [lineItems]);
 
   // TODO 5
-  const atUpdateQuantity = useCallback((id: String, quantityChange: Number) => {
-    // 只要 function 要傳值給其他 component 的話，就要用 useCallback 包起來，避免產生新的 instance
-    // 增加數量
-    // setProductItems((prev) => {
-    //   return prev.map((item: Product) => {
-    //     if (item.id === id) {
-    //       return {
-    //         id: item.id,
-    //         title: item.title,
-    //         price: item.price,
-    //         quantity: item.inventory - 1,
-    //       };
-    //     }
-    //     return item;
-    //   });
-    // });
-    setLineItems((prev) => {
-      return prev.map((item: LineItem) => {
-        if (item.id === id) {
-          const currentQuantity = item.quantity + quantityChange;
-          return {
-            id: item.id,
-            title: item.title,
-            price: item.price,
-            quantity: currentQuantity > 0 ? currentQuantity : 1,
-          };
-        }
-        return item;
+  const atUpdateQuantity = useCallback(
+    (id: String, quantityChange: Number) => {
+      // 只要 function 要傳值給其他 component 的話，就要用 useCallback 包起來，避免產生新的 instance
+      // 增加數量
+
+      setLineItems((prev) => {
+        return prev.map((item: LineItem) => {
+          if (item.id === id) {
+            const currentQuantity = item.quantity + quantityChange;
+            // console.log(item.title, inventory, currentQuantity);
+            return {
+              id: item.id,
+              title: item.title,
+              price: item.price,
+              quantity: currentQuantity > 0 ? currentQuantity : 1,
+              inventory: productItems.find((product) => product.id === id).inventory,
+            };
+          }
+
+          return item;
+        });
       });
-    });
-  }, []);
+      setProductItems((prev) => {
+        return prev.map((product: Product) => {
+          if (product.id === id) {
+            const currentProductQuantity = product.inventory - quantityChange;
+            // console.log(product);
+            return {
+              id: product.id,
+              img: product.img,
+              title: product.title,
+              price: product.price,
+              inventory: currentProductQuantity,
+            };
+          }
+          return product;
+        });
+      });
+    },
+    [productItems],
+  );
   // 使用 useCallback 時，讓 [] 數量越少越好
   // 比較優雅的寫法，不用在 [] 塞東西
   // TODO
@@ -64,7 +74,7 @@ const ShoppingCart = () => {
     (id: string) => {
       const foundItem = lineItems.find((data) => data.id === id);
       if (foundItem) {
-        atUpdateQuantity(id);
+        atUpdateQuantity(id, +1);
       } else {
         // 新增
         const foundProduct = PRODUCTS.find((data) => data.id === id);
@@ -75,20 +85,36 @@ const ShoppingCart = () => {
           title: foundProduct.title,
           quantity: 1,
         };
+        atUpdateQuantity(id, +1);
         setLineItems((prev) => prev.concat(lineItem));
       }
     },
     [atUpdateQuantity, lineItems],
   );
 
-  // TODO
   const onRemoveItem = useCallback((id: string) => {
     setLineItems((prev) => prev.filter((item) => item.id !== id));
+
+    const { inventory } = PRODUCTS.find((product) => product.id === id);
+    setProductItems((prev) => {
+      return prev.map((product: Product) => {
+        if (product.id === id) {
+          return {
+            id: product.id,
+            img: product.img,
+            title: product.title,
+            price: product.price,
+            inventory,
+          };
+        }
+        return product;
+      });
+    });
   }, []);
 
-  // TODO
   const onRemoveCart = useCallback(() => {
     setLineItems([]);
+    setProductItems(PRODUCTS);
   }, []);
 
   // FIXME 請實作 coupon
@@ -101,6 +127,7 @@ const ShoppingCart = () => {
   const provideValue = {
     totalAmount,
     lineItems,
+    productItems,
   };
 
   return (
@@ -108,7 +135,7 @@ const ShoppingCart = () => {
       <div className="container">
         <div className="row">
           {/* TODO 4 */}
-          {PRODUCTS.map((product) => {
+          {productItems.map((product) => {
             return (
               <div className="col-3" key={product.id}>
                 <ProductItem
