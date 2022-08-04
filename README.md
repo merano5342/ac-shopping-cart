@@ -17,3 +17,13 @@
 - 購物車數量減少鈕按行為不正確。
 - 請實作 Coupon 功能
   - 一次只能 apply 一個 coupon
+
+  ## feature
+  feature 1
+  - ProductItem
+    - quantity 的數量要隨購物車數量減少
+    - 如果賣完，文字換成 Sold out，同時不能點擊
+  feature 2 
+  - 解決購物車數量減少鈕按行為不正確問題
+  feature 3
+  - Coupon 功能：一次只能 apply 一個 coupon

@@ -27,10 +27,12 @@ const BuildItem: React.FC<BuildItemProps> = (props) => {
     <section className="row" data-name="CartLineItem" data-gradient>
       <div className="col-2">{title}</div>
       <div className="col-3">
-        {/* FIXME：這裡有 bug，怎麼修好他呢? */}
-        <button onClick={() => onUpdateQuantity(id, quantity - 1)}>-</button>
+        {/* FIXME：這裡有 bug，怎麼修好他呢？
+        onUpdateQuantity(id, changeQuantity)
+        */}
+        <button onClick={() => onUpdateQuantity(id, -1)}>-</button>
         <span className="px-1">{quantity}</span>
-        <button onClick={() => onUpdateQuantity(id, quantity + 1)}>+</button>
+        <button onClick={() => onUpdateQuantity(id, +1)}>+</button>
       </div>
 
       <div className="col-2">{price}</div>

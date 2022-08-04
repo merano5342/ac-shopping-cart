@@ -1,4 +1,5 @@
 import type { Product } from './types';
+// 型別提示在 types.js
 
 // TODO 1
 export const PRODUCTS: Product[] = [

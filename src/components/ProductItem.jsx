@@ -1,7 +1,9 @@
 import React from 'react';
 import { Product } from './types';
 // TODO 3
-// 可以這樣做 ＆
+// DRY
+// 可以用 ＆ 引入別的檔案中已經寫好的定義（引入 types 裡面的 Product 型別定義
+// flow js 是抄 typescript 的，所以使用方式很像
 type ProductItemProps = Product & {
   onAddToCart(id: string): void,
 };
