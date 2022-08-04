@@ -11,12 +11,13 @@ type CartProps = {
   onUpdateQuantity: (id: string) => void,
   onRemoveItem: (id: string) => void,
   onRemoveCart: () => void,
+  // atApplyCoupon: (coupon: string) => void,
+  discountTotalAmount: number,
 };
 
 const Cart: React.FC<CartProps> = (props) => {
   const { onUpdateQuantity, onRemoveItem, onRemoveCart } = props;
-  const { totalAmount, lineItems, productItems } = useCartContext();
-
+  const { totalAmount, lineItems } = useCartContext();
   return (
     <section data-name="Cart">
       <h2>購物車</h2>

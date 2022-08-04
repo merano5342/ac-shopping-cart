@@ -3,9 +3,11 @@ import { coupons } from './config';
 
 type CouponsProps = {
   onApplyCoupon: (coupon: string) => void,
+  discounts: number,
+  totalAmount: Number,
 };
 const Coupons: React.FC<CouponsProps> = (props) => {
-  const { onApplyCoupon } = props;
+  const { onApplyCoupon, discounts, totalAmount } = props;
   return (
     <section data-name="coupons">
       {coupons.map((coupon) => {
@@ -13,6 +15,11 @@ const Coupons: React.FC<CouponsProps> = (props) => {
           <button
             key={coupon.id}
             className="btn btn-info"
+            disabled={
+              coupon.discount === discounts ||
+              totalAmount <= 0 ||
+              coupon.discount >= totalAmount
+            }
             onClick={() => {
               onApplyCoupon(coupon);
             }}
